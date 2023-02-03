@@ -17,11 +17,183 @@
   <body>
   <div style="display:none" id="rawData">
 
-
   
 ## Intro to Intelligent Agents
 ### Rational agent
-  
+  - What is an agent ?
+  - takes in input and performs an action
+  - reads input via sensors
+    - what kind of input ? : info about the environment in which it is placed
+    - "Precept sequence" : the history of all input so far
+  - performs actions via actuators
+    - what is the impact of that action ? : the environment is modified
+    - how does the agent decide what action to perform ?
+      - this is described in the "agent program"
+      - ... which is the implementation of the mathematical "agent function"
+      - precept sequence ---> [agent function] --> action
+      - another way to represent it is as a table with cols : "precept sequence" and "action" ... this can be an infinitely large table
+  - our aim is to make good agents
+    - what makes an agent good or bad? : we define a good behavior as being rational
+    -  a rational agent does the right thing
+      - how do we know if the agent is doing the right thing ?
+      - by checking if the actions it performed as desirable for the environment
+      - this is done by evaluating the sequence of environment state. This is the "Performance measure" of the rational agent
+     - Defining a rational agent
+        - for each precept sequence, a rational agent selects an action that maximizes the performance measure, given the evidence of the agents  knowledge of the environment and the precept sequence
+        - this means rationality depend on
+           - performance measure
+           - agent's prior knowledge of the env
+           - actions agent can perform
+           - percept seq
+        - information gathering is also an imp part of rationality
+          - performing actions to modify future percepts
+          - this increases agents knowledge about the env
+        - Rationality is different from omniscience
+          - omniscient means knowing the outcome of each action... which is not possible in reality
+          - rational agent depends on percept sequence to date
+        - rational agent must also learn from what it percives
+           - agent may have some prior knowledge but as it becomes more experienced, it's knowledge must also be augmented
+           - a rational agent is "autonomous" if it depends less on a priori knowledge and more on its own learned expeience
+the nature of Environment
+an extensive way to describe the task environment
+what is task environment ?
+the problem that the agent is trying to solve
+the PEAS description
+Performance Measure
+Environment
+Actuator
+Sensors
+various ways to classify the task environment
+fully vs partially observable
+fully observable
+if agent's sensor can access all the aspects of the environment relevant to take an action
+partially observed
+full state of env not accessible ... due to some reason like noise/inaccuate sensors
+agent has to keep an internal state of the env
+unobservable env
+if agent has no sensors
+single agent vs multiagent
+example
+single agent
+agent solving a crossword puzzle
+multiagent
+driver , agent playing chess
+in multiagent env, we need to decide if the agent treats other enties in the env as agents or just objects
+multiagent env can be
+competitive
+cooperative
+deterministic vs stochastic
+deterministic
+next state of the environment can be completely determined by the current state and the action
+stochastic
+some uncertainty in determining the next env state
+real world is mostly partially observable and Stochastic
+non deterministic vs stochastic
+stochastic implies uncertainty is quantified  via probability
+uncertain environment
+not fully observable or not deterministic
+episodic vs sequential
+episodic
+agent's experience is divided into atomic episodes
+agents gets input and performs action in each episode
+next episode does not depend on the last one
+example :identifying defective pieces on an assembly line
+sequential
+current decisions  can affect future decisions
+example: chess,driving
+static vs dynamic
+static
+agent need not keep track to time while taking a decision as the env will remain same
+example: solving crossword puzzle
+dynamic
+env can change while the agent is still deciding
+agent has to continuously watch the env for changes
+if the env changed, it is said the agent did not perform any action
+example :  taxi driving
+semi-dynamic
+env might not change over time but the agent performance score may change
+example : chess under a timer
+discrete vs continuous
+this classification can apply to
+the state of the env
+example
+discrete : chess (distinct states)
+continuous : taxi driving
+how time is handled
+percepts, actions of the agent
+example
+discrete : chess (finite moves)
+continuous : driving (steering angle )
+known vs unknown
+this classification applies to the agent 's knowledge of the env
+known env
+the outcome of the all actions on the env are known
+unknown env
+agent not aware of the env
+it must learn about it
+known unknown vs fully partially observable
+a known env can be fully or partially observable
+Describing the internal working of an agent
+developing the agent program
+agent = architecture + program
+architecture :  the computing device
+program : how the agent takes action
+many types ; have same structure
+input: current percept
+dosen't the agent program depend on percept sequence ?
+yes. if the program needs percept sequence , it must remember on it's own
+output : action
+programs combines certain components to generate action
+agent program types
+Simple reflex agent
+selects action based on current input ; ignores percept seq
+actions based on condition-action rule
+if "condition" , then "do this action"
+limited intelligence
+require fully observable env ; otherwise may have problems
+Model based reflex agent
+the big question is how to handle partial observability in simple reflex agents ?
+by keeping an internal state of the env
+we need  to model the world
+how the world evolves independently and how the next state of the world depends on the current state and the action
+then use the current state in the rule based condition to find next action
+Goal based agents
+actions may not depend only on the current state ... it must also have a goal
+example: taxi need a destination
+goals can either be reached by a single action or a sequence of actions
+decision making is different from reflex agents
+it requires consideration of future
+more flexible
+knowledge on which decisions made is explicit.
+this means it can be modified
+Utility based agent
+multiple  action sequence may lead to the goal. but which is the most efficient  ?
+utility function : an internalization of the performance measure that allows agent to measure utility value for a sequence of world state ...to compare which sequence of actions is better
+learning agents
+this is how most agent program come into being
+by building a learning machine and then teaching it
+this allows agents to work initially in unknown env and learn to get better
+components of a general learning agent
+critic
+determines how the agent is doing based on an external fixed performance standard
+learning element
+resp for making improvements; using feedback from critic
+performance element
+responsible for selecting the action
+problem generator
+suggests exploratory actions
+to explore and do sub optimal actions in the short run to get better in the long run
+the representation of the environment in the agent program
+different components of the agent program can represent the env in different ways
+atomic representation
+each state of the world is indivisible
+example : for route finding, all cities on the map are atomic
+used in areas of : searching and planning,  HMM
+factored representation
+splitting the state into a fixed set of variables /attributes
+used in areas : CSP, logic
+structural representation
+describing relationship among various objects
 
 ## Problem solving agents
   
