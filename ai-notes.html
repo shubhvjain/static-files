@@ -1,0 +1,214 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    .main[open] summary ~ *{animation:open 0.3s ease-in-out}@keyframes open{0%{opacity:0}100%{opacity:1}}.main summary::-webkit-details-marker{display:none}.main summary{width:100%;padding:0.5rem 0;position:relative;cursor:pointer;font-size:1.25rem;font-weight:300;list-style:none}.main summary:after{content:"+";color:black;position:absolute;font-size:1.75rem;line-height:0;margin-top:0.75rem;right:0;font-weight:200;transform-origin:center;transition:200ms linear}.main[open] summary:after{transform:rotate(45deg);font-size:2rem}.main summary{outline:0}.main p{font-size:0.95rem;margin:0 0 1rem;padding-top:1rem}</style>
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body>
+  <div style="display:none" id="rawData">
+
+
+  
+## Intro to Intelligent Agents
+### Rational agent
+  
+
+## Problem solving agents
+  
+
+## Constraint satisfcation problem
+  
+
+## Logic based Agents
+### Basic concepts of logic
+
+ 
+- 1- Representing knowledge
+  - 1- Syntax
+    - What make a sentence legal ?
+    - Formula : a legal sentence in the logic 
+  - 2- Semantics
+    - Which sentences are true under which assignment ?
+    - E.g. : under the assignment $ \phi =  \\{W=T,S=F \\}$, the $ \phi \models W $ and $ \phi \nvDash W \implies S$
+    
+- 2 - Reasoning about knowledge 
+  - 1- Entitlement 
+    - Symbol: $A \models B$ (means B is entailed by A)
+    - For all $\phi$ with $\phi \models A$ , then $\phi \models B$
+    - E.g. : $P \land (P \implies Q) \models Q$
+    - What can we conclude from a sentence ?
+  - 2- Deduction
+    - Symbol: $A \vdash_c B$ (means B can be derived from A)
+    - Which statement B can be derived from A using a set of inference rules C
+    
+- 3- Two imp properties 
+  - Soundness  : If A deduces B , A also entails B
+  - Completeness : If A entails B , A also deduces B
+  
+### Propostional logic $PL_0$
+
+- 1- Syntax
+  - A well formed formula is made from 
+    - $V_0$ : set of Propositional variables 
+    - $\sum_0$ : set of constants and connectives
+      - connectives :  $\neg$ (Negation) , $\land$ (Conjunction),  $\lor$ (Disjunction) ,  $\implies$ (implication) ,  $\iff$ (equivalence/biimplication)
+      - Constants  : $T,F$
+  - $wff_0(V_0)$ : a set of well formed formulas made using  $V_0$ and $\sum_0$
+  - atomic formula  : Without any connectives , Else the formula is complex 
+  - literal  : Atom or a negated atom (A or $\neg A$)
+  - Grammar for $PL^0$ : See https://courses.voll-ki.fau.de/browser/%3AsTeX%2Fdocument%3Farchive%3DMiKoMH%2FAI%26filepath%3Dcourse%2Fnotes%2Fnotes.xhtml?inDocPath=-qxa9pm.-z4t3oa.-245l3g
+  
+- 2 - Semantics 
+  - Model $M = \{ D_0, J \}$
+    - $D_0= {T, F}$ is the universe
+    - J is the interperation : Assigns $D_0$ values  to essential connectives
+      - $J(\neg) : D_0 \to D_0; T \to F , F \to T$
+      - $J(\land) : D_0 \times D_0 \to D_0; (a,b) \to T \text{ iff }a = b = T$
+      - Other connectives can be defined using these essential connectives 
+  - Variable assignment : $\varphi : V_0 \to D_0$ (assigning a value to a prop var)
+  - Value function : $J_{\varphi} : wf_0(V_0) \to D_0 $ (assign a value to a sentence. Done recursively )
+    - Base case: $J_{\varphi}(P) = \varphi(P)$
+    - For neg : $J(\neg A) = J(\neg)(J_{\varphi}(A))$
+    - For and : $J_{\varphi}(A \land B) = J(\land) (J_{\varphi}(A),J_{\varphi}(B))$
+    - Other connectives are converted to these 2 base connectives
+    
+- 3- Identities
+  - Idenpotence  : $a \land a = a$ , $a \lor a = a$
+  - identity: $a \land T = a$, $a \lor F = a$
+  - Absorption : $a \land F = F$, $a \lor T = T$
+  - Commutativity  : $a \land b = b \land a$ , $a \lor b = b \lor a$
+  - Associativity : $a \land (b \land c)  = (a \land b )  \land c$, $a \lor (b \lor c)  = (a \lor b )  \lor c$
+  - Distributivity : $a \land (b \lor c) = (a \land b)\lor (a \land c)$, $a \lor (b \land c) = (a \lor b)\land (a \lor c)$
+  - Demorgan : $\neg(a \land b)= \neg a \lor \neg b$, $\neg(a \lor b)= \neg a \land \neg b$
+  - Definitions
+    - Or : $a \lor b = \neg (\neg a \land \neg b) $
+    - Implication : $a \implies b = \neg a \lor b$
+    - Biconditional : $a \iff b  = (a \implies b) \land  (b \implies a)$
+    
+- 4 - Properties of formulas “A” for some model M = {U,J}
+  - True under $\varphi$ : If $J_{\varphi}(A) = T$
+  - False under $\varphi$ : If $J_{\varphi}(A) = F$
+  - Satisfiable in M : Iff $J_{\varphi}(A) = T$ for some $\varphi$, Eg : $x \lor x$
+  - Valid in M :  Iff $J_{\varphi}(A) = T$ for all $\varphi$ ,  Eg : $x \lor \neg x$
+  - Falsifiable in M : Iff $J_{\varphi}(A) = F$ for some $\varphi$, Eg : $x \lor x $  
+  - Unsatisfiable :  Iff $J_{\varphi}(A) = F$ for all $\varphi$, Eg: $x \land \neg x$
+  - Entailment in $PL_0$ : A entails B iff $J_{\varphi}(B) = T   $ for all $\varphi$ with $J_{\varphi}(A) = T$
+  
+- 5 - Inference 
+  - 1 - Propositional logic using Hilbert Calculus : A Simple formal system
+    - 2 axioms
+      - H1 : $A \implies (B \implies A)$
+      - H2 : $A \implies (B \implies C) \implies ((A \implies B) \implies (A \implies C))$
+    - 2 inference rules
+      - Modus ponnen : $\underline{A, A \implies B } \\ B$
+      - Substitution : $\underline{A} \\ \[ B/X \](A)$ 
+  - 2- Natural deduction Calculus by Gentzen ($ND_0$)
+    - Given set $H \subseteq wff_0(V_0) $ (set of assumptions) and C (conclusion), $H \vdash _{ND_0} C$ , iff there is a derivation tree whose leaves are in H
+    - Inference Rules
+      - Conjunction
+        - $ \land_I : \\ A \\ \underline{B} \\ A \land B  $
+        - $ \land_E : \\  \underline{A \land B} \\ A \\ B  $
+      - Disjunction
+        - $ \lor_I : \\ \underline{  A } \\ A \lor B \\  B \lor A $
+        - $ \lor_E : \\   A \lor B  \\ \underline{  \neg A  }  \\  B$ or $ \lor_E : \\   A \lor B  \\ \underline{\neg B}\\A $
+      - Negation
+      - Implication
+        - $ {\implies}_E : \\ A \implies B \\ \underline {A} \\ B  $ (aka Modus Ponens)
+        - $ {\implies}_I$  derives B from A using hypothetical reasoning
+          - A is the local hypothesis
+          - $\implies $ discharges the hypothesis (A) and concludes $A \implies B$
+      - Bi-implication 
+    - 2 kinds of rules for each connective :
+      - Introduction : to prove a sentence with some main logical operator 
+      - Elimination : to prove part of a sentence this operator os a part of 
+    - Deduction theorem for $ND_0$ : $H, A \vdash_{ND0} B$, iff $H \vdash_{ND0} A \implies B$
+    
+- 6 - Machine oriented calculus
+  - 1- Unsatisfiability theorem
+  - 2- Theorem proving
+  - 3 - Analytical Tableau
+  - 4 - Resolution
+  
+- 7 - Normal forms
+  - Conjunctive Normal Form (CNF)
+  - Disjunctive Normal Form (DNF)
+  
+- 8 - SAT solver for $PL^0$
+### First order logic $PL_1$
+
+- 1- Why FOL ?
+- 2 - Syntax
+- 3 - Semantics
+- 4 - Substitution 
+- 5 - Inference
+  - 1 - Natural deduction by Gentzen
+    -  Rules  : All rules of $PL_0$ + Rules for quantifiers 
+	- $\forall$
+	  - Introduction 
+	  - Elimination 
+	- $\exists$
+	  - Introduction
+	  - Elimination
+  - 2 - FOL with equality
+  - 3 - Automated theorem proving
+    - 1 - Tableaux
+    - 2 - Resolution 
+  - 4 - Natural Deduction using Sequent Calculus
+### Formal systems
+
+
+### Logical programming
+
+
+### Knowledge representation
+
+  
+## Planning agents
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 p-2">
+        <div class="p-2 mt-3 border-bottom mb-3"> <h2>Artificial Intelligence</h2></div>
+        <div id="content1"></div>
+      </div>
+    </div>
+  </div>
+    <script>    
+      window.onload = function(){loadData()}
+      const loadData = () => {
+        let data = document.getElementById("rawData").innerHTML 
+        let fullHTML = ""
+        let sections = data.split("\n\#\# ")
+        sections.map(section=>{
+          if(section.trim().length>0){
+            let subs = section.split("\n\#\#\# ")
+            let title = subs[0]
+            subs.shift()
+ 	  let innerSub = ""
+            subs.map(sub=>{
+              let lines = sub.split("\n"); 
+	       let subtitle = lines.shift();
+	      let subtext = lines.join("\n");
+            	innerSub += `<details class="ms-3"> <summary> ${subtitle} </summary> ${marked.parse(subtext)}  </details>`
+            })
+            let sh = `<details class='main'> <summary> ${title} </summary> ${innerSub}   </details>`
+            fullHTML += sh
+          }
+        })
+        const parsedData = marked.parse(data)
+        document.getElementById("content1").innerHTML = fullHTML
+        renderMathInElement(document.body, {delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+      }
+    </script>
+  </body>
+</html>
