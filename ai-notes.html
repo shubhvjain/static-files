@@ -9,9 +9,8 @@
     <style>
     .main[open] summary ~ *{animation:open 0.3s ease-in-out}@keyframes open{0%{opacity:0}100%{opacity:1}}.main summary::-webkit-details-marker{display:none}.main summary{width:100%;padding:0.5rem 0;position:relative;cursor:pointer;font-size:1.25rem;font-weight:300;list-style:none}.main summary:after{content:"+";color:black;position:absolute;font-size:1.75rem;line-height:0;margin-top:0.75rem;right:0;font-weight:200;transform-origin:center;transition:200ms linear}.main[open] summary:after{transform:rotate(45deg);font-size:2rem}.main summary{outline:0}.main p{font-size:0.95rem;margin:0 0 1rem;padding-top:1rem}</style>
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+   <script>MathJax = {tex: { inlineMath: [['$', '$']], displayMath:[['$$','$$']] }};</script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
@@ -195,7 +194,6 @@ agent has to keep an internal state of the env
 
 ## Constraint satisfcation problem
   
-
 ## Logic based Agents
 ### Basic concepts of logic
 
@@ -234,7 +232,6 @@ agent has to keep an internal state of the env
   - atomic formula  : Without any connectives , Else the formula is complex 
   - literal  : Atom or a negated atom (A or $\neg A$)
   - Grammar for $PL^0$ : See https://courses.voll-ki.fau.de/browser/%3AsTeX%2Fdocument%3Farchive%3DMiKoMH%2FAI%26filepath%3Dcourse%2Fnotes%2Fnotes.xhtml?inDocPath=-qxa9pm.-z4t3oa.-245l3g
-  
 - 2 - Semantics 
   - Model $M = \{ D_0, J \}$
     - $D_0= {T, F}$ is the universe
@@ -248,7 +245,6 @@ agent has to keep an internal state of the env
     - For neg : $J(\neg A) = J(\neg)(J_{\varphi}(A))$
     - For and : $J_{\varphi}(A \land B) = J(\land) (J_{\varphi}(A),J_{\varphi}(B))$
     - Other connectives are converted to these 2 base connectives
-    
 - 3- Identities
   - Idenpotence  : $a \land a = a$ , $a \lor a = a$
   - identity: $a \land T = a$, $a \lor F = a$
@@ -261,7 +257,6 @@ agent has to keep an internal state of the env
     - Or : $a \lor b = \neg (\neg a \land \neg b) $
     - Implication : $a \implies b = \neg a \lor b$
     - Biconditional : $a \iff b  = (a \implies b) \land  (b \implies a)$
-    
 - 4 - Properties of formulas “A” for some model M = {U,J}
   - True under $\varphi$ : If $J_{\varphi}(A) = T$
   - False under $\varphi$ : If $J_{\varphi}(A) = F$
@@ -285,56 +280,47 @@ agent has to keep an internal state of the env
 - 3 - Natural deduction Calculus by Gentzen ($ND_0$)
     - Given set $H \subseteq \text{wff}_0(V_0) $ (set of assumptions) and C (conclusion), $H \vdash _{ND_0} C$ , iff there is a derivation tree whose leaves are in H
     - Inference Rules
-      - Conjunction
-        - $ \land_I :  [A] [B] \Rrightarrow  [A \land B]  $
-        - $ \land_El :  [A \land B] \Rrightarrow [A]$
-	- $ \land_Er : [A \land B] \Rrightarrow [B]$
-      - Disjunction
-        - $ \lor_I : [A] \Rrightarrow [A \lor B] [B \lor A] $
-        - $ \lor_E : [A \lor B]  \\ \underline{  \neg A  }  \\  B$ or $ \lor_E : \\   A \lor B  \\ \underline{\neg B}\\A $
-      - Negation
-      - Implication
-        - $ {\implies}_E : \\ A \implies B \\ \underline {A} \\ B  $ (aka Modus Ponens)
-        - $ {\implies}_I$  derives B from A using hypothetical reasoning
-          - A is the local hypothesis
-          - $\implies $ discharges the hypothesis (A) and concludes $A \implies B$
-      - Bi-implication 
+      - Conjunction : $ \boxed{ \land I :  \begin{prooftree} \AxiomC{A} \AxiomC{B} \BinaryInfC{ $A \land B$ }  \end{prooftree} } \quad  \boxed{ \land_{El} :  \begin{prooftree} \AxiomC{$A \land B$ } \UnaryInfC{ $A$ }  \end{prooftree}  }   \quad \boxed{ \land_{Er} :  \begin{prooftree} \AxiomC{$A \land B$ } \UnaryInfC{ $B$ }  \end{prooftree} } $
+      - Implication : $ \boxed{ \to_I :  \begin{prooftree} \AxiomC{[$A$]} \noLine \UnaryInfC{$B$} \UnaryInfC{$A \to B$} \end{prooftree} } \quad  \boxed{ \to_{E}  :   \begin{prooftree} \AxiomC{A} \AxiomC{$A \to B$ } \BinaryInfC{ $B$ }  \end{prooftree}  }    $
+        - $ {\to}_I$  derives B from A using hypothetical reasoning
+        - A is the local hypothesis
+        - $\to $ discharges the hypothesis (A) and concludes $A \to B$
+      - Disjunction :
+        - $ \boxed{ \lor_{Il} :   \begin{prooftree} \AxiomC{$A$} \UnaryInfC{$A \lor B$}  \end{prooftree}   }  \quad \boxed{ \lor_{Ir} :   \begin{prooftree} \AxiomC{$B$} \UnaryInfC{$A \lor B$}  \end{prooftree} }  $
+        -  $ \boxed{  \lor_{E} : \begin{prooftree} \AxiomC{$A \lor B$} \AxiomC{[$A$]} \noLine \UnaryInfC{$C$} \AxiomC{[$B$]} \noLine \UnaryInfC{$C$} \TrinaryInfC{$C$} \end{prooftree} } $ 
+      - Negation : $\boxed{ \neg_{I} :   \begin{prooftree} \AxiomC{[$A$]} \noLine \UnaryInfC{$C$}  \noLine \UnaryInfC{$\neg C$} \UnaryInfC{$\neg A $}  \end{prooftree} }  \quad \boxed{  \neg_{E} : \begin{prooftree} \AxiomC{$A$} \AxiomC{$\neg A$}  \BinaryInfC{$\bot$} \end{prooftree} } $
+      - Bi-implication  : 
     - 2 kinds of rules for each connective :
       - Introduction : to prove a sentence with some main logical operator 
       - Elimination : to prove part of a sentence this operator os a part of 
     - Deduction theorem for $ND_0$ : $H, A \vdash_{ND0} B$, iff $H \vdash_{ND0} A \implies B$
-    
 - 6 - Machine oriented calculus
   - 1- Unsatisfiability theorem
   - 2- Theorem proving
   - 3 - Analytical Tableau
   - 4 - Resolution
-  
 - 7 - Normal forms
   - Conjunctive Normal Form (CNF)
   - Disjunctive Normal Form (DNF)
-  
 - 8 - SAT solver for $PL^0$
 ### First order logic $PL_1$
 
 - 1- Why FOL ?
 - 2 - Syntax
 - 3 - Semantics
-- 4 - Substitution 
-- 5 - Inference
-  - 1 - Natural deduction by Gentzen
-    -  Rules  : All rules of $PL_0$ + Rules for quantifiers 
-	- $\forall$
-	  - Introduction 
-	  - Elimination 
-	- $\exists$
-	  - Introduction
-	  - Elimination
-  - 2 - FOL with equality
-  - 3 - Automated theorem proving
-    - 1 - Tableaux
-    - 2 - Resolution 
-  - 4 - Natural Deduction using Sequent Calculus
+- 4 - Substitution
+### Inference in First order logic
+
+
+- 1 - Natural deduction by Gentzen
+  -  Rules  : All rules of $PL_0$ + Rules for quantifiers
+    - $\forall$  : 
+    - $\exists$ : 
+- 2 - FOL with equality
+- 3 - Automated theorem proving
+  - 1 - Tableaux
+  - 2 - Resolution 
+- 4 - Natural Deduction using Sequent Calculus
 ### Formal systems
 
 
@@ -343,6 +329,37 @@ agent has to keep an internal state of the env
 
 ### Knowledge representation
 
+- knowledge ladder :
+  - different levels of info
+  - chars --(add syntax)--> data --(add context)-->info--(add networking)-->knowledge
+  - here we are concerned about using knowledge to support intellignet reasoning
+- knowledge representation vs Data str
+  - representation includes :
+    - structure : what is the data ?
+    - function : what do we do with the data?
+  - data is simple /general
+  - knowledge is complex and has a distinguished process model
+- various paradigms of know rep:
+  - good old fashioned AI : rep : symbolic ; process: based on huristic search
+  - statistical : rep : symbolic ; procss : ML
+  - connectionist : rep : sub symbolic, process: processing elements and weighted links
+- how to evaluaute a good represenation ?
+  - expressive adequacy : 
+  - reasoning efficiency: can it gen result in acceptbale speeds 
+  - primitives: what are the basic rep  
+  - meta repr: knowl about knowl 
+  - completeness 
+- Semantic Network
+- Sematic Web
+- Logic based knowl rep
+  - why :
+  - challenges :
+    - difficult to get world knowledge in symbolic repr
+    - process models can be intractable 
+  - desciption logic : logic based system that are expressive enough but still decidable
+    - $PL_0$ as set description logic
+- ALC
+  - a simple Description logic 
   
 ## Planning agents
   </div>
@@ -378,7 +395,7 @@ agent has to keep an internal state of the env
         })
         const parsedData = marked.parse(data)
         document.getElementById("content1").innerHTML = fullHTML
-        renderMathInElement(document.body, {delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+       // renderMathInElement(document.body, {delimiters: [ {left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
       }
     </script>
   </body>
