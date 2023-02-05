@@ -196,7 +196,6 @@ agent has to keep an internal state of the env
   
 ## Logic based Agents
 ### Basic concepts of logic
-
  
 - 1- Representing knowledge
   - 1- Syntax
@@ -204,8 +203,7 @@ agent has to keep an internal state of the env
     - Formula : a legal sentence in the logic 
   - 2- Semantics
     - Which sentences are true under which assignment ?
-    - E.g. : under the assignment $ \phi =  \\{W=T,S=F \\}$, the $ \phi \models W $ and $ \phi \nvDash W \implies S$
-    
+    - E.g. : under the assignment $ \phi =  \\{W=T,S=F \\}$, the $ \phi \models W $ and $ \phi \nvDash W \implies S$ 
 - 2 - Reasoning about knowledge 
   - 1- Entitlement 
     - Symbol: $A \models B$ (means B is entailed by A)
@@ -214,8 +212,7 @@ agent has to keep an internal state of the env
     - What can we conclude from a sentence ?
   - 2- Deduction
     - Symbol: $A \vdash_c B$ (means B can be derived from A)
-    - Which statement B can be derived from A using a set of inference rules C
-    
+    - Which statement B can be derived from A using a set of inference rules C 
 - 3- Two imp properties 
   - Soundness  : If A deduces B , A also entails B
   - Completeness : If A entails B , A also deduces B
@@ -231,7 +228,7 @@ agent has to keep an internal state of the env
   - $wff_0(V_0)$ : a set of well formed formulas made using  $V_0$ and $\sum_0$
   - atomic formula  : Without any connectives , Else the formula is complex 
   - literal  : Atom or a negated atom (A or $\neg A$)
-  - Grammar for $PL^0$ : See https://courses.voll-ki.fau.de/browser/%3AsTeX%2Fdocument%3Farchive%3DMiKoMH%2FAI%26filepath%3Dcourse%2Fnotes%2Fnotes.xhtml?inDocPath=-qxa9pm.-z4t3oa.-245l3g
+  - Grammar for $PL^0$ : See notes
 - 2 - Semantics 
   - Model $M = \{ D_0, J \}$
     - $D_0= {T, F}$ is the universe
@@ -294,29 +291,66 @@ agent has to keep an internal state of the env
       - Introduction : to prove a sentence with some main logical operator 
       - Elimination : to prove part of a sentence this operator os a part of 
     - Deduction theorem for $ND_0$ : $H, A \vdash_{ND0} B$, iff $H \vdash_{ND0} A \implies B$
-- 6 - Machine oriented calculus
+- 4 - Machine oriented calculus intro : 
   - 1- Unsatisfiability theorem
   - 2- Theorem proving
-  - 3 - Analytical Tableau
-  - 4 - Resolution
-- 7 - Normal forms
-  - Conjunctive Normal Form (CNF)
-  - Disjunctive Normal Form (DNF)
-- 8 - SAT solver for $PL^0$
+  - 3- Normal forms 
+- 5 - Analytical Tableau ($T_0$) :
+  - Inference rules :
+    - Conjunction :  $\boxed{   \begin{prooftree}  \AxiomC{$A \land B$}  \UnaryInfC{A} \noLine \UnaryInfC{B} \end{prooftree} }  \quad \boxed{    \begin{prooftree}  \AxiomC{$\neg(A \land B)$}  \UnaryInfC{$\neg A \quad | \quad \neg B$}  \end{prooftree}  } $
+    - Negation : $\boxed{\begin{prooftree}  \AxiomC{$A$}  \UnaryInfC{$\neg A$}  \end{prooftree} }  \quad \boxed{ \begin{prooftree}  \AxiomC{$\neg A$}  \UnaryInfC{$A$}  \end{prooftree}} \quad \boxed{ \begin{prooftree}  \AxiomC{A} \noLine \UnaryInfC{$\neg A$} \UnaryInfC{$\bot$}   \end{prooftree}} $
+    - Disjunction : $\boxed{\begin{prooftree}  \AxiomC{$A \lor B$}  \UnaryInfC{$A \quad | \quad B$}  \end{prooftree} }  \quad \boxed{  \begin{prooftree}  \AxiomC{$\neg(A \lor B)$}  \UnaryInfC{$\neg A$} \noLine \UnaryInfC{$\neg B$} \end{prooftree}}$
+    - Implication :  $\boxed{\begin{prooftree}  \AxiomC{$A \to B$}  \UnaryInfC{$\neg A \quad | \quad B$}  \end{prooftree} }  \quad \boxed{  \begin{prooftree}  \AxiomC{$\neg(A \to B)$}  \UnaryInfC{$A$} \noLine \UnaryInfC{$\neg B$} \end{prooftree}}$
+    - Biconditional :  
+- 6 - Resolution
+- 7 - SAT solver for $PL^0$
 ### First order logic $PL_1$
 
 - 1- Why FOL ?
-- 2 - Syntax
+  - using FOL, we can talk about individual objects, their properties, relation on object, function on objects. Existence of individual with a property, universitality of a property
+- 2 - Syntax :
+  - the FOL vocabulary $\sum_0$ contains :
+    - connectives : $\sum^0$ (same as $PL^0$)
+    - function constants : $\sum^f = {f,g,h}$
+    - predicate constants : $\sum_p = {p,q,r}$
+    - Skolem constants : $\sum_{sk}= {\dots}$
+  - variable : $V_l = {X,Y,Z}$
+  - Terms : 
+    - $A \in wf_L(\sum_l,V_l)$  (A is a well formed term)
+    - $V_l \in wf_L(\sum_l,V_l)$
+    - $f(A^1,\dots,A^k) \in  wf_L(\sum_l,V_l)$ where $A_i \in wf_L(\sum_l,V_l)$
+    - $p(A^1,\dots,A^k) \in wf_L(\sum_l,V_l) $
+    - if $A,B \in wf_L(\sum_l,V_l), X \in V_l , \text{then},  T, A \land,\neg A, \forall X A \in wf_L(\sum_l,V_l) $
+      - $\forall$ : universal quantifier
+  - other propositions/ quantifiers can be derived using above :
+    - $A \lor B = \neg (\neg A \land \neg B)$
+    - $A \to B = \neg A \lor B$
+    - $A \leftrightarrow B = (A \to B) \land (B \to A) $
+    - $\exists X A = \neg (\forall X \neg A)$
+  - formula without connective, quantifier = atomic , else complex
+  - more about variables :
+    -  bound
 - 3 - Semantics
+  - expressions are interpreted in a model $M = {D,I}$
+  - D : Domain , set of non empty individual
+  - I : interpretation function : assigns a value to every basic expression
+  - interpretation:
+    - $J()$
 - 4 - Substitution
 ### Inference in First order logic
 
 
 - 1 - Natural deduction by Gentzen
   -  Rules  : All rules of $PL_0$ + Rules for quantifiers
-    - $\forall$  : 
-    - $\exists$ : 
-- 2 - FOL with equality
+    - $\forall$  : $\boxed{ \forall_{I} :   \begin{prooftree} \AxiomC{$A(\dots c \dots c \dots)$} \UnaryInfC{$\forall xA(\dots x \dots x \dots) $}  \end{prooftree} }  \quad \boxed{  \forall_{E} : \begin{prooftree} \AxiomC{$\forall x A(\dots x \dots x \dots)$} \UnaryInfC{$A(\dots c \dots c \dots) $}  \end{prooftree} } $
+      - elimination : we drop universal quantifier x by replacing every instance of x with c
+      - introduction : this is tricky as we have to enumerate each and every possible value. so here take x as an arbitary value. restrictiopns : c must not exists in any undischarged assumptions and x must not occur in $A(c \dots)$
+    - $\exists$ : $\boxed{ \exists_{I} :   \begin{prooftree} \AxiomC{$A(\dots c \dots c \dots)$} \UnaryInfC{$\exists x A(\dots x \dots c \dots) $}  \end{prooftree} }  \quad \boxed{  \exists{E} : \begin{prooftree} \AxiomC{$\exists x A(\dots x \dots )$} \AxiomC{$[A(\dots c \dots)]$} \noLine \UnaryInfC{B} \BinaryInfC{B}  \end{prooftree} } $
+      - intro : replaced the name c with a varaible x (given x does not occur in A). note we don't have to replace all c's
+      - elim : restrictions : c must not occur in any undischarged assumptions before , c must not occur in $\exists x A(x \dots)$, c must not occur in B
+- 2 - FOL with equality:
+  - Intro :
+  - Elimination : 
 - 3 - Automated theorem proving
   - 1 - Tableaux
   - 2 - Resolution 
@@ -360,7 +394,11 @@ agent has to keep an internal state of the env
     - $PL_0$ as set description logic
 - ALC
   - a simple Description logic 
+### Solved examples
+
+
   
+
 ## Planning agents
   </div>
   <div class="container">
