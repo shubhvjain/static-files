@@ -491,20 +491,24 @@ Eg 1
         let data = document.getElementById("rawData").innerHTML 
         let fullHTML = ""
         let sections = data.split("\n\#\# ")
+	let n = {s: 0,ss:0}
         sections.map(section=>{
           if(section.trim().length>0){
+	    n.s++
             let subs = section.split("\n\#\#\# ")
-            let title = subs[0]
+            let title = `[${n.s}] ${subs[0]}`
             subs.shift()
  	  let innerSub = ""
             subs.map(sub=>{
+	      n.ss++
               let lines = sub.split("\n"); 
-	       let subtitle = lines.shift();
+	      let subtitle = `[${n.s}.${n.ss}] ${lines.shift()}`;
 	      let subtext = lines.join("\n");
             	innerSub += `<details class="ms-3"> <summary> ${subtitle} </summary> ${marked.parse(subtext)}  </details>`
             })
             let sh = `<details class='main'> <summary> ${title} </summary> ${innerSub}   </details>`
             fullHTML += sh
+	    n.ss = 0
           }
         })
         const parsedData = marked.parse(data)
