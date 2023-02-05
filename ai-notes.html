@@ -292,17 +292,89 @@ agent has to keep an internal state of the env
       - Elimination : to prove part of a sentence this operator os a part of 
     - Deduction theorem for $ND_0$ : $H, A \vdash_{ND0} B$, iff $H \vdash_{ND0} A \implies B$
 - 4 - Machine oriented calculus intro : 
-  - 1- Unsatisfiability theorem
+  - 1- Unsatisfiability theorem :
+    - if $H \models A$ iff $H \cup {\neg A}$ is unsatisfiable
+    - satisfiable : a formula is satisfiable if it os true under some assignment of its variable
+    - how to find value of variables that make a formula satisfiable (SAT problem)
+    - $H \models A$ (H entails A) iff $H \cup {\neg A}$ is unsatisfiable i.e. this is not true for any assignment 
   - 2- Theorem proving
-  - 3- Normal forms 
+    - given a formal systemm theorem proving is determining whether $H \vdash C$ for a conjuecture C and hypothesis H
+    - automated theorem proving : devloping calculi for the logic system and program that given a set of H and A determines whether $H \vdash_{c} A$
+      - ATM induces a seach problem, P = {S,A,T,I,G}
+      - S : set of formulas
+      - A : actions (inference rules from calculi C)
+      - I : initial state , I = {H}
+      - G : goal state, ($A \in S$)
+      - the problem is that this seach is not efficient (no good heristics)
+    - givn a conjecture A, Hypothesis H, Test calculi T tries to derive : $H,\neg A \vdash_T \bot$ instead of $H \vdash_T A $
+      - $\neg A$ is unsatifsiable iff A is valid
+      - such derivation is called refutation of A
+  - 3- Normal forms:
+    - Clause Normal Form (aka Conjunctive normal form) :
+      - Clause : $C = C_1 \land C_2 \land \dots$ (in set notations : $\{C_1,C_2,\dots \}$)
+      - where $C_i = D_1 \lor D_2 \lor D_3 \lor \dots$
+      - where $D_i$ = literal
+      - e.g. : $(A \lor \neg B) \land (C \lor D) \land (E \lor \neg A)$
+      - any formula can be converted to CNF , but usually the size blows up
 - 5 - Analytical Tableau ($T_0$) :
+  - construct a tree  : each labelled node is a sub formula to be proved/refuted
+  - refutation tableaux : show that the negation of a formula A cannot be satisfied => A can be satisfied
+  - inf rule introduces new nodes and branches in the tree
+  - if a branch leads to contradication, that branch is closed
+  - the proof is complete when all branches are closed
   - Inference rules :
     - Conjunction :  $\boxed{   \begin{prooftree}  \AxiomC{$A \land B$}  \UnaryInfC{A} \noLine \UnaryInfC{B} \end{prooftree} }  \quad \boxed{    \begin{prooftree}  \AxiomC{$\neg(A \land B)$}  \UnaryInfC{$\neg A \quad | \quad \neg B$}  \end{prooftree}  } $
     - Negation : $\boxed{\begin{prooftree}  \AxiomC{$A$}  \UnaryInfC{$\neg A$}  \end{prooftree} }  \quad \boxed{ \begin{prooftree}  \AxiomC{$\neg A$}  \UnaryInfC{$A$}  \end{prooftree}} \quad \boxed{ \begin{prooftree}  \AxiomC{A} \noLine \UnaryInfC{$\neg A$} \UnaryInfC{$\bot$}   \end{prooftree}} $
     - Disjunction : $\boxed{\begin{prooftree}  \AxiomC{$A \lor B$}  \UnaryInfC{$A \quad | \quad B$}  \end{prooftree} }  \quad \boxed{  \begin{prooftree}  \AxiomC{$\neg(A \lor B)$}  \UnaryInfC{$\neg A$} \noLine \UnaryInfC{$\neg B$} \end{prooftree}}$
     - Implication :  $\boxed{\begin{prooftree}  \AxiomC{$A \to B$}  \UnaryInfC{$\neg A \quad | \quad B$}  \end{prooftree} }  \quad \boxed{  \begin{prooftree}  \AxiomC{$\neg(A \to B)$}  \UnaryInfC{$A$} \noLine \UnaryInfC{$\neg B$} \end{prooftree}}$
-    - Biconditional :  
-- 6 - Resolution
+    - Biconditional :
+  - Some related terms :
+    - saturated tableau : no further rules can be applied to expand the tree further
+    - Closed branch : if $\bot$ is at the end , else open
+    - closed Tableau : iff all branches are closed
+    - A is a tabluau theorem iff there exists a closed tableau with $\neg A$ at the root
+  - in proof system, we check the validity by checking of the inference rules are valid
+  -  a test caclucli is refutation sound iff its inference rules preserve satisfiability and the goal formula is unsatisfiable
+  - soundness in tableau : $T_0$ is sound i.e. $\phi \subseteq wff_0(V_0)$ is valid iff there is a closed tableua T for $\neg \phi$
+  - completeness in tableau : $T_0$ is complete i.e. if $\phi \subseteq wff_0(V_0)$ is valid, then there is a closed tableau T for $\neg \phi$
+  - $T_0$ terminates i.e. every $T_0$ tableau becomes satureated after finitely many rule application 
+  - example : prove $(p \to (q \to r))\to((p \to q)\to(p \to r) )$
+    - $ \neg\{ (p \to (q \to r))\to((p \to q)\to(p \to r) )\} $
+    - $p \to ( q \to r)$
+    - $\neg ( (p \to q) \to (p \to r) )$
+    - $p \to q$
+    - $\neg ( p \to r )$
+    - $p$
+    - $\neg r$
+    - $\neg p \quad |_1 \quad q $
+    - $\bot \quad |_1 \quad  \neg p \quad |_2 \quad  q \to r  $
+    - $\quad  \quad |_1 \quad  \bot \quad |_2 \quad  \neg q \quad  |_3 \quad r   $
+    - $\quad  \quad |_1 \quad   \quad \quad |_2 \quad  \bot \quad |_3 \quad  \bot  $
+- 6 - Resolution ($R_0$) :
+  - also a refuation method
+  - preprocessing step : convert all forumlas to Clause normal form
+  - goal : derive empty clause $\square$ (which is unsatisfiable)
+  - Inference rule (just 1): $\boxed{  \dfrac{  (P^T \lor A ) , (P^F \lor B )}{ A \lor B}  }$
+    - $P^F, P^T$ are cut literals
+    - this inference rule adds resolvent clause in the Knowledge base
+  - Resolution refutation: S (Clause set) , $R_0$  derviation of $\square$ from S  : $S \vdash_{R0} \square $
+  - this method is based on the tautologic equivalence of the follwoing formula : $(\neg p \lor q) \land (p \lor r) \equiv (\neg p \lor q) \land (p \lor r) \land ( q \lor r) $
+  - example : $(p \to (q \to r))\to ( (p \to q) \to (p \to r) ) $
+    - 1st :convert the negation to CNF :
+      - $\neg((p \to (q \to r))\to ( (p \to q) \to (p \to r) )) $
+      - $\neg (  \neg(p \to (q \to r)) \lor (  (p \to q) \to (p \to r) )    )$
+      - $\neg  \neg(p \to (q \to r)) \land  \neg(  (p \to q) \to (p \to r) ) $
+      - $(p \to (q \to r)) \land  \neg(  (p \to q) \to (p \to r) ) $
+      - $(\neg p \lor (\neg q \lor r)) \land  \neg(  \neg (p \to q) \lor (p \to r) ) $
+      - $\boxed{\neg p \lor \neg q \lor r} \land  ((\neg p \lor q) \land  \neg (\neg p \lor r) ) $
+      - $\boxed{\neg p \lor \neg q \lor r} \land  ((\neg p \lor q) \land   (\neg \neg p \land \neg r) ) $
+      - $\boxed{\neg p \lor \neg q \lor r} \land  \boxed{\neg p \lor q}  \land   \boxed{p} \land \boxed{\neg r}  $
+    - now apply the inf rule to add more resolvants :
+      - $\boxed{\neg p \lor \neg q \lor r}_1 , \boxed{\neg p \lor q}_2  ,   \boxed{p}_3 , \boxed{\neg r}_4  $
+      - resolve 2 and 3 :   $\boxed{\neg p \lor \neg q \lor r}_1 , \boxed{\neg p \lor q}_2  ,   \boxed{p}_3 , \boxed{\neg r}_4  , \boxed{q}_5 $
+      - resolve 1 and 5 :  $\boxed{\neg p \lor \neg q \lor r}_1 , \boxed{\neg p \lor q}_2  ,   \boxed{p}_3 , \boxed{\neg r}_4  , \boxed{q}_5 , \boxed{\neg p \lor r}_6$
+      - resolve 3 and 6 :  $\boxed{\neg p \lor \neg q \lor r}_1 , \boxed{\neg p \lor q}_2  ,   \boxed{p}_3 , \boxed{\neg r}_4  , \boxed{q}_5 , \boxed{\neg p \lor r}_6 ,\boxed{r}_7$
+      - resolve 4 and 7 :  $\boxed{\neg p \lor \neg q \lor r}_1 , \boxed{\neg p \lor q}_2  ,   \boxed{p}_3 , \boxed{\neg r}_4  , \boxed{q}_5 , \boxed{\neg p \lor r}_6 ,\boxed{r}_7, \boxed{\square}_8$
 - 7 - SAT solver for $PL^0$
 ### First order logic $PL_1$
 
@@ -397,8 +469,12 @@ agent has to keep an internal state of the env
 ### Solved examples
 
 
-  
+Eg 1 
+### Useful links
 
+- title : Natural deduction proof editor and checker , link : https://proofs.openlogicproject.org/
+- title : Truth Table Generator , link : https://stanford.edu/class/cs103/tools/truth-table-tool/
+  
 ## Planning agents
   </div>
   <div class="container">
